@@ -1,0 +1,15 @@
+
+    <a href="{{route('{{ moduleName }}.edit',${{ modelVariable }}['id'])}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="left" title="Edit User">
+        <i class="fa fa-edit"></i>
+    </a>
+
+
+
+    <form method="POST" action="{{route('{{ moduleName }}.destroy',${{ modelVariable }}['id'])}}"  class="d-inline">
+	@csrf
+        <input type="hidden" name="_method" value="delete">
+        <button type="submit" class="btn btn-danger btn-sm delete_user" data-toggle="tooltip" data-placement="left" title="Delete User">
+            <i class="fa fa-trash"></i>
+        </button>
+    </form>
+

@@ -1,0 +1,18 @@
+{
+    "name": "snssystem/laravel-module-generator",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Snssystem\\LaravelModuleGenerator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Miniraj Shrivastava",
+            "email": "miniraj.shrivastava@snssystem.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}

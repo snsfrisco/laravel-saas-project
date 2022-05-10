@@ -1,0 +1,128 @@
+<?php
+
+namespace {{ namespace }};
+
+use App\Http\Controllers\Controller;
+use App\Models\{{ model }};
+use App\Http\Requests\{{ storeRequest }};
+use App\Http\Requests\{{ updateRequest }};
+
+class {{ class }} extends Controller
+{
+    /**
+     * Constructor
+     *
+     */
+    public function __construct(){
+
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        if($request->ajax()){
+            ${{ moduleName }} = {{ model }}::get();
+            return DataTables::of(${{ moduleName }})
+                ->addIndexColumn()
+                ->addColumn('column_name',function(${{ modelVariable }}){
+                    return ${{ modelVariable }}->column_name;
+                })
+                ->addColumn('action',function(${{ modelVariable }}){
+                    return view('client_user.members._action', compact('{{ modelVariable }}'));
+                })
+                ->rawColumns(['column_name', 'action'])
+                ->make(true);
+        }
+        return view('{{ moduleViewsDir }}.index');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        ${{ modelVariable }} = false;
+        return view('{{ moduleViewsDir }}.create', compact('{{ modelVariable }}'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \App\Http\Requests\{{ storeRequest }}  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store({{ storeRequest }} $request)
+    {
+        $request->validate([
+            'name' => 'required'
+        ]);
+
+        ${{ modelVariable }} = {{ model }}::create([
+            'name' => $request->name,
+            'created_by' => auth()->id()
+        ]);
+
+        return redirect()->route('{{ moduleName }}.index')->with('success', 'Successfully Created');
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\{{ model }}  ${{ modelVariable }}
+     * @return \Illuminate\Http\Response
+     */
+    public function show({{ model }} ${{ modelVariable }})
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\{{ model }}  ${{ modelVariable }}
+     * @return \Illuminate\Http\Response
+     */
+    public function edit({{ model }} ${{ modelVariable }})
+    {
+        return view('{{ moduleViewsDir }}.edit', compact('{{ modelVariable }}'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\{{ updateRequest }}  $request
+     * @param  \App\Models\{{ model }} ${{ modelVariable}}
+     * @return \Illuminate\Http\Response
+     */
+    public function update({{ updateRequest }} $request, {{ model }} ${{ modelVariable }})
+    {
+        $request->validate([
+            'field_name' => 'required'
+        ]);
+
+        $user->field_name = $request->field_name;
+
+        $user->updated_by = auth()->id();
+        $user->save();
+
+        return redirect()->route('{{ moduleName }}.index')->with('success', 'Successfully Updated');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\{{ model }} ${{ modelVariable}}
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy({{ model }} ${{ modelVariable }})
+    {
+        ${{ modelVariable }}->delete();
+        return redirect()->route('{{ moduleName }}.index')->with('success', 'Successfully Deleted');
+    }
+}
