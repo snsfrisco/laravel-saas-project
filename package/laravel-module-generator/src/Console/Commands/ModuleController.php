@@ -16,7 +16,7 @@ class ModuleController extends Command
      *
      * @var string
      */
-    protected $signature  = 'make:modulecontroller {name} {moduleName} {model} {modelVariable} {storeRequest} {updateRequest} {moduleViewsDir}';
+    protected $signature  = 'make:modulecontroller {name} {moduleName} {model} {modelVariable} {modelVariable_plural} {storeRequest} {updateRequest} {moduleViewsDir} {routes_prefix}';
 
     /**
      * The console command description.
@@ -89,15 +89,24 @@ class ModuleController extends Command
             $namespace = $namespace.'\\'.$string_before_controller_name;
         }
 
+        $routes_prefix = trim($this->argument('routes_prefix'));
+        if(!empty($routes_prefix)){
+            $routes_prefix .= '.'.$this->argument('moduleName');
+        }else{
+            $routes_prefix = $this->argument('moduleName');
+        }
+
         return [
             'namespace'         => $namespace,
             'class_name'        => $class_name,
             'moduleName'        => $this->argument('moduleName'),
             'model'             => $this->argument('model'),
             'modelVariable'     => $this->argument('modelVariable'),
+            'modelVariable_plural' => $this->argument('modelVariable_plural'),
             'storeRequest'      => $this->argument('storeRequest'),
             'updateRequest'     => $this->argument('updateRequest'),
-            'moduleViewsDir'    => $this->argument('moduleViewsDir')
+            'moduleViewsDir'    => $this->argument('moduleViewsDir'),
+            'routes_prefix'     => $routes_prefix
         ];
     }
 

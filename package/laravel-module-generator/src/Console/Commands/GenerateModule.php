@@ -40,20 +40,36 @@ class GenerateModule extends Command
     public function handle()
     {
         $output = new BufferedOutput();
-        $moduleName = trim($this->ask('Module (in plural form)?'));
+        $moduleName = trim($this->ask('Module (in lower-case and in plural form, eg. products, product-categories etc)?'));
         if(empty($moduleName)){
             $this->error('Module name is required!');
             return 0;
         }
         $moduleName = strtolower($moduleName);
         $this->line("Module :{$moduleName}");
+        $routes_prefix = $this->ask('Enter routes prefix (if any)');
         $controller_name = $this->ask('Controller Name (with or without directory name like Dirname/DummyController)');
         $model = $this->ask('Model Name (use singluar form and pascal case like ModelName)');
         $modelVariable = Str::snake($model);
+        $modelVariable_plural = Str::snake(Str::pluralStudly($model, 2));
         $storeRequest = $model."StoreRequest";
         $updateRequest = $model."UpdateRequest";
         $moduleViewsDir = $this->ask('Module views files directory path inside views folder(eg. admin/users):');
         $moduleViewsDir = str_replace('/', '.', $moduleViewsDir);
+        $extendLayout = $this->ask('Enter layout path for views files to extend, eg. portal_user.layouts.app, company_user.layouts.app, client_user.layout.app etc');
+
+        // Routes
+            $namespace = 'App\\Http\\Controllers';
+            $class_name = $controller_name;
+            if(Str::contains($class_name, '/')){
+                $class_name = Str::afterLast($class_name, '/');
+                $string_before_controller_name = Str::beforeLast($controller_name, '/'.$class_name);
+                $string_before_controller_name = Str::replace('/', '\\', $string_before_controller_name);
+                $namespace = $namespace.'\\'.$string_before_controller_name;
+            }
+            dump("=========== Module Route =========");
+            dump("use ".$namespace."\\".$class_name);
+            dump("Route::resource('{$moduleName}', {$class_name}::class)");
         /* dd([
             'name' => $controller_name,
             'moduleName' => $moduleName,
@@ -62,7 +78,10 @@ class GenerateModule extends Command
             'storeRequest' => $storeRequest,
             'updateRequest' => $updateRequest,
             'moduleViewsDir' => $moduleViewsDir,
+            'routes_prefix'  => $routes_prefix,
+            'extendLayout'      => $extendLayout,
         ]); */
+
 
         // create controller
             if(empty($controller_name)){
@@ -71,13 +90,15 @@ class GenerateModule extends Command
                 $this->call(
                     'make:modulecontroller',
                     [
-                        'name' => $controller_name,
-                        'moduleName' => $moduleName,
-                        'model' => $model,
-                        'modelVariable' => $modelVariable,
-                        'storeRequest' => $storeRequest,
-                        'updateRequest' => $updateRequest,
-                        'moduleViewsDir' => $moduleViewsDir,
+                        'name'                  => $controller_name,
+                        'moduleName'            => $moduleName,
+                        'model'                 => $model,
+                        'modelVariable'         => $modelVariable,
+                        'modelVariable_plural'  => $modelVariable_plural,
+                        'storeRequest'          => $storeRequest,
+                        'updateRequest'         => $updateRequest,
+                        'moduleViewsDir'        => $moduleViewsDir,
+                        'routes_prefix'         => $routes_prefix,
                     ],
                     $output
                 );
@@ -97,6 +118,8 @@ class GenerateModule extends Command
                             'model'             => $model,
                             'modelVariable'     => $modelVariable,
                             'moduleViewsDir'    => $moduleViewsDir,
+                            'extendLayout'      => $extendLayout,
+                            'routes_prefix'     => $routes_prefix,
                         ],
                         $output
                     );
@@ -132,10 +155,7 @@ class GenerateModule extends Command
                 );
             }
 
-        // Routes
-            dump("=========== Module Route =========");
-            dump("use App\Http\Controllers\{$controller_name}");
-            dump("Route::resource('{$moduleName}', {$controller_name}::class)");
+
 
 
         // $this->newLine(3);

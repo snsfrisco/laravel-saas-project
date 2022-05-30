@@ -1,16 +1,15 @@
 @extends('{{ extendLayout }}')
 
-@section('title') {{ __('{{ moduleName }}') }} @endsection
+@section('title') {{ __('{{ headline }}') }} @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="javascript::">{{ __('{{ moduleName }}') }}</a></li>
-    <li class="breadcrumb-item active">{{ __('{{ moduleName }}') }}</li>
+    <li class="breadcrumb-item"><a href="javascript::">{{ __('{{ headline }}') }}</a></li>
 @endsection
 
 @section('add-model-button')
     {{-- @can('create_user') --}}
-    <a href="{{ route('{{ moduleName }}.create') }}" class="btn btn-primary btn-sm float-right">
-        <i class="fa fa-plus"></i> {{ __('Add {{ model }}') }}
+    <a href="{{ route('{{ routes_prefix }}.create') }}" class="btn btn-primary btn-sm float-right">
+        <i class="fa fa-plus"></i> {{ __('Add {{ singular_headline }}') }}
     </a>
     {{-- @endcan --}}
 @endsection
@@ -18,7 +17,7 @@
 @section('content')
     <div class="card card-primary card-outline">
         <div class="card-header">
-            <h3 class="card-title">{{ __('{{ moduleName }}') }}
+            <h3 class="card-title">{{ __('{{ headline }}') }}
                 <button type="button" class="btn btn-primary btn-xs text-xs ml-3" data-toggle="collapse" data-target="#filter_div" aria-expanded="false" aria-controls="filter_div" id="filter_btn" title="Filter">
                     <i class="fa fa-filter"></i> <span id="filter_txt">Show</span>
                 </button>
@@ -94,7 +93,7 @@
                 scrollY: 300,
                 fixedHeader: true,
                 stateSave: true,
-                ajax: "{{route('{{ moduleName }}.index')}}",
+                ajax: "{{route('{{ routes_prefix }}.index')}}",
                 columns: [
                     {data:"DT_RowIndex", sortable: false},
                     {data:"id"},

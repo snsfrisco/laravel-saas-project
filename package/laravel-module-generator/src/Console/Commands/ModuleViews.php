@@ -7,6 +7,7 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Pluralizer;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Illuminate\Support\Str;
 
 class ModuleViews extends Command
 {
@@ -15,7 +16,7 @@ class ModuleViews extends Command
      *
      * @var string
      */
-    protected $signature = 'make:moduleviews {viewFile} {moduleName} {model} {modelVariable} {moduleViewsDir}';
+    protected $signature = 'make:moduleviews {viewFile} {moduleName} {model} {modelVariable} {moduleViewsDir} {extendLayout} {routes_prefix}';
 
     /**
      * The console command description.
@@ -79,14 +80,27 @@ class ModuleViews extends Command
      */
     public function getStubVariables()
     {
+        $headline = Str::headline($this->argument('moduleName'));
+        $singular_headline = Str::headline(Str::pluralStudly($this->argument('model'), 1));
+
+        $routes_prefix = trim($this->argument('routes_prefix'));
+        if(!empty($routes_prefix)){
+            $routes_prefix .= '.'.$this->argument('moduleName');
+        }else{
+            $routes_prefix = $this->argument('moduleName');
+        }
+
         return [
             'namespace'         => 'App\\Http\\Controllers',
             'viewFile'          => $this->argument('viewFile'),
             'moduleName'        => $this->argument('moduleName'),
+            'headline'          => $headline,
+            'singular_headline' => $singular_headline,
             'model'             => $this->argument('model'),
             'modelVariable'     => $this->argument('modelVariable'),
             'moduleViewsDir'    => $this->argument('moduleViewsDir'),
-            'extendLayout'      => 'client_user.layouts.app'
+            'extendLayout'      => $this->argument('extendLayout'),
+            'routes_prefix'     => $routes_prefix
         ];
     }
 

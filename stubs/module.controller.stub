@@ -27,7 +27,7 @@ class {{ class_name }} extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            ${{ moduleName }} = {{ model }}::get();
+            ${{ modelVariable_plural }} = {{ model }}::get();
             return DataTables::of(${{ moduleName }})
                 ->addIndexColumn()
                 ->addColumn('column_name',function(${{ modelVariable }}){
@@ -70,7 +70,7 @@ class {{ class_name }} extends Controller
             'created_by' => auth()->id()
         ]);
 
-        return redirect()->route('{{ moduleName }}.index')->with('success', 'Successfully Created');
+        return redirect()->route('{{ routes_prefix }}.index')->with('success', 'Successfully Created');
     }
 
     /**
@@ -113,7 +113,7 @@ class {{ class_name }} extends Controller
         ${{ modelVariable }}->updated_by = auth()->id();
         ${{ modelVariable }}->save();
 
-        return redirect()->route('{{ moduleName }}.index')->with('success', 'Successfully Updated');
+        return redirect()->route('{{ routes_prefix }}.index')->with('success', 'Successfully Updated');
     }
 
     /**
@@ -125,6 +125,6 @@ class {{ class_name }} extends Controller
     public function destroy({{ model }} ${{ modelVariable }})
     {
         ${{ modelVariable }}->delete();
-        return redirect()->route('{{ moduleName }}.index')->with('success', 'Successfully Deleted');
+        return redirect()->route('{{ routes_prefix }}.index')->with('success', 'Successfully Deleted');
     }
 }

@@ -20,6 +20,7 @@ use App\Http\Controllers\Cats\CatsController;
 
 // use Mail;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

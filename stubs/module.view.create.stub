@@ -1,25 +1,25 @@
 @extends('{{ extendLayout }}')
 
 @section('title')
-    {{ __('Create {{ model }}') }}
+    {{ __('Create {{ singular_headline }}') }}
 @endsection
 
 @section('breadcrumb')
-    <li class="breadcrumb-item"><a href="{{ route('{{ moduleName }}.index') }}">{{ __('{{ moduleName }}') }}</a></li>
-    <li class="breadcrumb-item active">{{ __('Create {{ model }}') }}</li>
+    <li class="breadcrumb-item"><a href="{{ route('{{ routes_prefix }}.index') }}">{{ __('{{ headline }}') }}</a></li>
+    <li class="breadcrumb-item active">{{ __('Create {{ singular_headline }}') }}</li>
 @endsection
 
 @section('content')
     <div class="card card-primary card-outline">
         <div class="card-header">
-            <h3 class="card-title">{{ __('Create {{ model }}') }}</h3>
+            <h3 class="card-title">{{ __('Create {{ singular_headline }}') }}</h3>
         </div>
         <!-- /.card-header -->
-        <form method="POST" action="{{ route('{{ moduleName }}.store') }}">
+        <form method="POST" action="{{ route('{{ routes_prefix }}.store') }}">
             @csrf
             <div class="card-body">
                 <div class="col-lg-12">
-                    @include('{{ moduleName }}._form')
+                    @include('{{ moduleViewsDir }}._form')
                 </div>
             </div>
             <div class="card-footer">
@@ -27,7 +27,7 @@
                     <button type="submit" class="btn btn-sm btn-primary">
                         <i class="fa fa-check"></i> {{ __('Save') }}
                     </button>
-                    <a href="{{ route('{{ moduleName }}.index') }}" class="btn btn-sm btn-danger">Close</a>
+                    <a href="{{ route('{{ routes_prefix }}.index') }}" class="btn btn-sm btn-danger">Close</a>
                 </div>
             </div>
         </form>
